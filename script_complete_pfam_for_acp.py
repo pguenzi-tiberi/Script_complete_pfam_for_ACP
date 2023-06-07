@@ -47,7 +47,6 @@ def run() :
     # Output
     optional_args.add_argument(
         "--output",
-        "-o",
         action="store",
         dest="output",
         help="",
@@ -81,16 +80,16 @@ def run() :
     global_start = time.perf_counter()
     
 
+    list_occurence=traitement.count(args.table_pfam_general,args.species_pfam)
+    table_pfam = pd.read_csv(args.table_pfam_general, sep="\t", header=None)
+    occurence="\t".join(list_occurence)
+    table_occurence=pd.DataFrame([list_occurence])
+    final_table=pd.concat([table_pfam,table_occurence])
+    final_table.to_csv(path_or_buf="final_table.tsv", sep="\t", header=False)
+
     print(
         f"\n Total running time : {float(time.perf_counter() - global_start)} seconds"
     )
-
-    list_occurence=traitement.count(args.table_pfam_general,args.species_pfam)
-    table_pfam = pd.read_csv(args.table_pfam_general, sep="\t", header=None)
-    occurence=list_occurence.split("\t")
-    table_occurence=pd.read_csv(occurence, sep="\t", header=None)
-    final_table=pd.concat([table_pfam,table_occurence])
-    final_table.to_csv(path_or_buf="final_table.tsv", sep="\t", header=False)
     
 if __name__ == '__main__':
     run()
